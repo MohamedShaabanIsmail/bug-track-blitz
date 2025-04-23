@@ -4,7 +4,7 @@ import { User } from "@/types";
 
 interface UserAvatarProps {
   user: User;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl"; // Add 'xl' to the allowed sizes
 }
 
 const UserAvatar = ({ user, size = "md" }: UserAvatarProps) => {
@@ -16,6 +16,8 @@ const UserAvatar = ({ user, size = "md" }: UserAvatarProps) => {
         return "h-10 w-10";
       case "lg":
         return "h-12 w-12";
+      case "xl":
+        return "h-16 w-16"; // Add a new size class for 'xl'
       default:
         return "h-10 w-10";
     }
