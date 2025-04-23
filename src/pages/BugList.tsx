@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -55,10 +55,11 @@ const BugList = () => {
 
   const filteredBugs = bugs.filter((bug) => {
     const matchesStatus = statusFilter === "all" || 
-      (statusFilter === "critical"
+      (bug.status === statusFilter);
+    const matchesSeverity = severityFilter === "all" || 
+      (severityFilter === "critical" 
         ? bug.severity === "critical"
-        : bug.status === statusFilter);
-    const matchesSeverity = severityFilter === "all" || bug.severity === severityFilter;
+        : bug.severity === severityFilter);
     const matchesSearch =
       searchQuery === "" ||
       bug.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -193,4 +194,3 @@ const BugList = () => {
 };
 
 export default BugList;
-
