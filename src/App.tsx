@@ -14,6 +14,8 @@ import CreateBug from "@/pages/CreateBug";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Profile from "@/pages/Profile";
+import Notifications from "@/pages/Notifications";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
                 <Route path="/bugs" element={<BugList />} />
                 <Route path="/bugs/:id" element={<BugDetail />} />
                 <Route path="/create" element={<CreateBug />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/notifications" element={<Notifications />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
@@ -44,4 +48,3 @@ const App = () => (
 );
 
 export default App;
-
