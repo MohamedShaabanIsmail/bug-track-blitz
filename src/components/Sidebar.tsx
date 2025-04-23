@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
-import { BarChart2, Bug, Filter, List, MessageSquare, Search, User } from "lucide-react";
+import { BarChart2, Bug, Filter, List } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { UserRole } from "@/types";
 
@@ -66,17 +66,6 @@ const Sidebar = ({ className }: SidebarProps) => {
             icon={<List className="h-4 w-4" />}
             label="New Bug"
           />
-          <NavItem
-            to="/search"
-            icon={<Search className="h-4 w-4" />}
-            label="Search"
-          />
-          <NavItem
-            to="/team"
-            icon={<User className="h-4 w-4" />}
-            label="Team"
-            userRole={["manager", "developer"]}
-          />
         </nav>
       </div>
       
@@ -93,3 +82,4 @@ const Sidebar = ({ className }: SidebarProps) => {
 };
 
 export default Sidebar;
+

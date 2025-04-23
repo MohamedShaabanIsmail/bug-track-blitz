@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, useState } from "react";
 import { Bug, BugSeverity, BugStatus, Comment, User } from "@/types";
 import { bugs as initialBugs } from "@/data/mockData";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 interface BugContextProps {
   bugs: Bug[];
@@ -25,6 +25,7 @@ export const BugProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [bugs, setBugs] = useState<Bug[]>(initialBugs);
   const { toast } = useToast();
+  const { currentUser } = useAuth();
 
   const addBug = (
     title: string,
@@ -52,6 +53,18 @@ export const BugProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const updateBugStatus = (bugId: string, status: BugStatus) => {
+    if (
+      status === "closed" &&
+      (!currentUser || !["manager", "tester"].includes(currentUser.role))
+    ) {
+      toast({
+        title: "Permission Denied",
+        description: "Only managers or testers can close a bug.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setBugs((prevBugs) =>
       prevBugs.map((bug) =>
         bug.id === bugId

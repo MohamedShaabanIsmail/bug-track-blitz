@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useBug } from "@/context/BugContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BugStatusBadge from "@/components/BugStatusBadge";
 import BugSeverityBadge from "@/components/BugSeverityBadge";
 import UserAvatar from "@/components/UserAvatar";
@@ -26,15 +26,38 @@ import { Bug, BugSeverity, BugStatus } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import { Search } from "lucide-react";
 
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 const BugList = () => {
   const { bugs } = useBug();
   const navigate = useNavigate();
-  const [statusFilter, setStatusFilter] = useState<BugStatus | "all">("all");
-  const [severityFilter, setSeverityFilter] = useState<BugSeverity | "all">("all");
+  const query = useQuery();
+
+  const initialStatus = query.get("status") as BugStatus | "all" | null;
+  const initialSeverity = query.get("severity") as BugSeverity | "all" | null;
+
+  const [statusFilter, setStatusFilter] = useState<BugStatus | "all">(initialStatus || "all");
+  const [severityFilter, setSeverityFilter] = useState<BugSeverity | "all">(initialSeverity || "all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    if (initialStatus && initialStatus !== statusFilter) {
+      setStatusFilter(initialStatus);
+    }
+    if (initialSeverity && initialSeverity !== severityFilter) {
+      setSeverityFilter(initialSeverity);
+    }
+    // eslint-disable-next-line
+  }, [query.get("status"), query.get("severity")]);
+
   const filteredBugs = bugs.filter((bug) => {
-    const matchesStatus = statusFilter === "all" || bug.status === statusFilter;
+    const matchesStatus = statusFilter === "all" || 
+      (statusFilter === "critical"
+        ? bug.severity === "critical"
+        : bug.status === statusFilter);
     const matchesSeverity = severityFilter === "all" || bug.severity === severityFilter;
     const matchesSearch =
       searchQuery === "" ||
@@ -170,3 +193,4 @@ const BugList = () => {
 };
 
 export default BugList;
+

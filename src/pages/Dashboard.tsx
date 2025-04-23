@@ -2,10 +2,20 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockStats } from "@/data/mockData";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const stats = mockStats;
-  
+  const navigate = useNavigate();
+
+  const handleCardClick = (status?: string) => {
+    let query = "";
+    if (status) {
+      query = `?status=${status}`;
+    }
+    navigate(`/bugs${query}`);
+  };
+
   const severityData = [
     { name: "Critical", value: stats.criticalBugs, color: "#EF4444" },
     { name: "High", value: stats.highBugs, color: "#F97316" },
@@ -35,7 +45,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleCardClick()}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Bugs</CardTitle>
           </CardHeader>
@@ -47,7 +57,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleCardClick("new")}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Open Bugs</CardTitle>
           </CardHeader>
@@ -59,7 +69,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleCardClick("closed")}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Closed Bugs</CardTitle>
           </CardHeader>
@@ -71,7 +81,7 @@ const Dashboard = () => {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleCardClick("critical")}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Critical Issues</CardTitle>
           </CardHeader>
@@ -170,3 +180,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

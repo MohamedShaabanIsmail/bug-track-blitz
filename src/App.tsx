@@ -12,6 +12,8 @@ import BugList from "@/pages/BugList";
 import BugDetail from "@/pages/BugDetail";
 import CreateBug from "@/pages/CreateBug";
 import NotFound from "@/pages/NotFound";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +26,8 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/bugs" element={<BugList />} />
@@ -40,3 +44,4 @@ const App = () => (
 );
 
 export default App;
+
