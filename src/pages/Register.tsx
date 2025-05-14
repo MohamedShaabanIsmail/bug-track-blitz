@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 
 const Register = () => {
   const { login } = useAuth();
@@ -20,16 +21,48 @@ const Register = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    // Simulated register logic (real app: call API)
+    
+    // Validation
     if (!inputs.email || !inputs.password || !inputs.name) {
       setError("All fields are required.");
       setLoading(false);
       return;
     }
-    // In actual app, create user here...
-    await login(inputs.email, inputs.password);
-    setLoading(false);
-    navigate("/");
+    
+    try {
+      // Call the backend registration API
+      const response = await fetch('http://localhost:8765/USERSERVICE/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: inputs.name,
+          email: inputs.email,
+          password: inputs.password,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+      
+      toast({
+        title: "Registration successful",
+        description: "Your account has been created successfully.",
+      });
+      
+      // After successful registration, log the user in
+      await login(inputs.email, inputs.password);
+      setLoading(false);
+      navigate("/");
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+      setLoading(false);
+    }
   };
 
   return (
