@@ -9,7 +9,7 @@ import { toast } from "@/components/ui/use-toast";
 const Register = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState({ email: "", password: "", name: "" });
+  const [inputs, setInputs] = useState({ username: "", password: "", name: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,24 +23,23 @@ const Register = () => {
     setLoading(true);
     
     // Validation
-    if (!inputs.email || !inputs.password || !inputs.name) {
+    if (!inputs.username || !inputs.password || !inputs.name) {
       setError("All fields are required.");
       setLoading(false);
       return;
     }
     
     try {
-      // Call the backend registration API
+      // Call the backend registration API with the requested format
       const response = await fetch('http://localhost:8765/USERSERVICE/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: inputs.name,
-          email: inputs.email,
+          username: inputs.username,
           password: inputs.password,
-          role: "ADMIN" // Adding the role parameter with value ADMIN
+          role: "ADMIN"
         }),
       });
       
@@ -56,7 +55,7 @@ const Register = () => {
       });
       
       // After successful registration, log the user in
-      await login(inputs.email, inputs.password);
+      await login(inputs.username, inputs.password);
       setLoading(false);
       navigate("/");
     } catch (err) {
@@ -85,10 +84,10 @@ const Register = () => {
         </div>
         <div>
           <Input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={inputs.email}
+            name="username"
+            type="text"
+            placeholder="Username"
+            value={inputs.username}
             onChange={handleChange}
             required
           />
