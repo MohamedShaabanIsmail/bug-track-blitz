@@ -40,6 +40,7 @@ const Register = () => {
           name: inputs.name,
           email: inputs.email,
           password: inputs.password,
+          role: "ADMIN" // Adding the role parameter with value ADMIN
         }),
       });
       
